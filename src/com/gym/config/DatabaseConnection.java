@@ -5,28 +5,34 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class DatabaseConnection {
+
     private static final String URL = "jdbc:mysql://localhost:3306/gym_db";
-    private static final String USER = "root";     // Replace with your local MySQL username
-    private static final String PASSWORD = "password"; // Replace with your local MySQL password
+    private static final String USER = "root";
 
-    private static Connection connection = null;
+    // IMPORTANT:
+    // Replace "" with your actual MySQL password.
+    // If your MySQL root user has NO password, keep it as "".
+    private static final String PASSWORD = "";
 
-    private DatabaseConnection() {} // Private constructor prevents direct instantiation
+    private DatabaseConnection() {
+        // Prevent object creation
+    }
 
-    public static Connection getConnection() {
+    public static Connection getConnection() throws SQLException {
+
         try {
-            if (connection == null || connection.isClosed()) {
-                Class.forName("com.mysql.cj.jdbc.Driver");
-                connection = DriverManager.getConnection(URL, USER, PASSWORD);
-                System.out.println("Database Connection Established Successfully!");
-            }
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            System.err.println("MySQL Driver class missing! Make sure mysql-connector JAR is in lib.");
-            e.printStackTrace();
-        } catch (SQLException e) {
-            System.err.println("Database connection failed! Ensure MySQL service is running.");
-            e.printStackTrace();
+            throw new SQLException(
+                    "MySQL JDBC Driver not found. Check mysql-connector-j in the lib folder.",
+                    e
+            );
         }
-        return connection;
+
+        return DriverManager.getConnection(
+                URL,
+                USER,
+                PASSWORD
+        );
     }
 }

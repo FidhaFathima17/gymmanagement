@@ -21,6 +21,9 @@ public class Member extends Person {
         this.expiryDate = expiryDate;
     }
 
+    public String getName() { return getFullName(); }
+    public String getPlan() { return planType; }
+
     public String getPlanType() { return planType; }
     public void setPlanType(String planType) { this.planType = planType; }
 
